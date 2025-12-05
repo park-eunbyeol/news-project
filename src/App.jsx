@@ -6,6 +6,8 @@ import SearchForm from "./components/SearchForm";
 import MainHeader from "./components/MainHeader";
 import { StatusProvider } from "./store/status-context";
 import Main from "./components/Main";
+import { NewsProvider } from "./store/news-context";
+
 function App() {
   const [query, setQuery] = useState("삼성");
 
@@ -20,10 +22,12 @@ function App() {
 
   return (
     <StatusProvider>
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-12">
-        <MainHeader handleSearch={handleSearch} inputRef={inputRef} />
-        <Main query={query} />
-      </div>
+      <NewsProvider>
+        <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-12">
+          <MainHeader handleSearch={handleSearch} inputRef={inputRef} />
+          <Main query={query} />
+        </div>
+      </NewsProvider>
     </StatusProvider>
   );
 }
