@@ -39,8 +39,6 @@ export function NewsProvider({ children }) {
 
   const [newsState, dispatch] = useReducer(newsReducer, initState);
 
-  const [news, setNews] = useState([]);
-
   async function fetchNews(callStatus, query) {
     const key = import.meta.env.VITE_NEWS_API_KEY;
     const country = "us";
@@ -52,13 +50,16 @@ export function NewsProvider({ children }) {
       api_url += `?q=${query}&sortBy=popularity&apiKey=${key}`;
     }
 
-    const response = await fetch(api_url);
-
-    const data = await response.json();
-    console.log(data);
-    setNews(data.articles);
+    try {
+      dispatch({ type: "LOADING" });
+      const response = await fetch(api_url);
+      const data = await response.json();
+      dispatch({ type: "SUCCESS", payload: data.articles });
+    } catch (error) {
+      dispatch({ type: "ERROR", payload: error.message });
+    }
   }
 
-  const value = { news, fetchNews };
+  const value = { newsState, fetchNews };
   return <NewsContext.Provider value={value}>{children}</NewsContext.Provider>;
 }

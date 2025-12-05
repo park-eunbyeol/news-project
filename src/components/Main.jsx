@@ -5,7 +5,7 @@ import { NewsContext } from "../store/news-context";
 
 export default function Main({ query }) {
   const { callStatus } = useContext(StatusContext);
-  const { news, fetchNews } = useContext(NewsContext);
+  const { newsState, fetchNews } = useContext(NewsContext);
   // const [news, setNews] = useState([]);
   useEffect(() => {
     fetchNews(callStatus, query);
@@ -33,7 +33,7 @@ export default function Main({ query }) {
   return (
     <main className="mt-12 flex-1">
       <section className="grid gap-6 xl:grid-cols-3 sm:grid-cols-2">
-        {news.map((article) => (
+        {newsState.news.map((article) => (
           <NewsCard key={article.url} {...article} />
         ))}
       </section>
