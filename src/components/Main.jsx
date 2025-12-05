@@ -33,6 +33,8 @@ export default function Main({ query }) {
   return (
     <main className="mt-12 flex-1">
       <section className="grid gap-6 xl:grid-cols-3 sm:grid-cols-2">
+        {newsState.isLoading && <div>로딩중입니다...</div>}
+        {newsState.error && <div>에러:{newsState.error}</div>}
         {newsState.news.map((article) => (
           <NewsCard key={article.url} {...article} />
         ))}

@@ -24,13 +24,17 @@ export function NewsProvider({ children }) {
    * 1.이전 상태값
    * 2.실행 타입(로딩,성공,에러)
    */
+
+  const LOADING = "LOADING";
+  const SUCCESS = "SUCCESS";
+  const ERROR = "ERROR";
   function newsReducer(state, action) {
     switch (action.type) {
-      case "LOADING":
+      case LOADING:
         return { isLoading: true, error: null, news: [] };
-      case "SUCCESS":
+      case SUCCESS:
         return { isLoading: false, error: null, news: action.payload };
-      case "ERROR":
+      case ERROR:
         return { ...state, isLoading: false, error: action.payload };
       default:
         return state;
@@ -51,12 +55,13 @@ export function NewsProvider({ children }) {
     }
 
     try {
-      dispatch({ type: "LOADING" });
+      dispatch({ type: LOADING });
       const response = await fetch(api_url);
+      //   throw new Error("에러가 발생했습니다");
       const data = await response.json();
-      dispatch({ type: "SUCCESS", payload: data.articles });
+      dispatch({ type: SUCCESS, payload: data.articles });
     } catch (error) {
-      dispatch({ type: "ERROR", payload: error.message });
+      dispatch({ type: ERROR, payload: error.message });
     }
   }
 
