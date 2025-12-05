@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useReducer, useState } from "react";
 
 export const NewsContext = createContext({
   news: [],
@@ -7,6 +7,38 @@ export const NewsContext = createContext({
 
 // named export
 export function NewsProvider({ children }) {
+  /**
+   * 3가지 상태
+   * 1.로딩 중
+   * 2.성공
+   * 3.실패
+   * useReducer
+   * -여러가지 상태를 한번에 다룰 때 사용
+   */
+  const initState = {
+    news: [],
+    isLoading: false,
+    error: null,
+  };
+  /**
+   * 1.이전 상태값
+   * 2.실행 타입(로딩,성공,에러)
+   */
+  function newsReducer(state, action) {
+    switch (action.type) {
+      case "LOADING":
+        return { isLoading: true, error: null, news: [] };
+      case "SUCCESS":
+        return { isLoading: false, error: null, news: action.payload };
+      case "ERROR":
+        return { ...state, isLoading: false, error: action.payload };
+      default:
+        return state;
+    }
+  }
+
+  const [newsState, dispatch] = useReducer(newsReducer, initState);
+
   const [news, setNews] = useState([]);
 
   async function fetchNews(callStatus, query) {
